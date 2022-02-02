@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApexStats"
         mc:Ignorable="d"
-        Title="Apex Legends Season Stats" Height="450" Width="800">
+        Title="Apex Legends Season Stats" Height="720" Width="1280">
     <Grid Margin="10">
 
         <Grid.RowDefinitions>
@@ -19,12 +19,12 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Column="0">Names</Label>
-        <ListBox Grid.Row="1" x:Name="lstNames" />
+        <Label Grid.Column="0">Seasons</Label>
+        <ListBox Grid.Row="1" x:Name="lstSeasons" />
 
-        <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,5,0">
             <Label>Season</Label>
-            <TextBox x:Name="txtName" />
+            <TextBox x:Name="txtSeason" />
             <Label>Split One Rank</Label>
             <ComboBox x:Name="txtSplitOneRank" />
             <Label>Split Two Rank</Label>
@@ -37,10 +37,10 @@
             <TextBox x:Name="txtRankedAvgDamage" />
             <Label>Ranked KDR</Label>
             <TextBox x:Name="txtRankedKdr" />
-            <Button x:Name="btnAdd" Margin="0,5,0,0" Click="ButtonAddName_Click">Add Name</Button>
+            <Button x:Name="btnAdd" Margin="0,5,0,0" Click="ButtonAddName_Click">Add Season Stats</Button>
             <Button x:Name="btnSave" Margin="0,5,0,0" Click="btnSave_Click">Save File</Button>
             <Button x:Name="btnOpen" Margin="0,5,0,0" Click="btnOpen_Click">Open File</Button>
-            <Button x:Name="btnShow" Margin="0,5,0,0" Click="btnShow_Click">Show Person</Button>
+            <Button x:Name="btnShow" Margin="0,5,0,0" Click="btnShow_Click">Show Season In Detail</Button>
         </StackPanel>
 
         <ListBox Grid.Row="1" x:Name="lstNamesSelected" Grid.Column="2" />

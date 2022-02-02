@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,8 +25,10 @@ namespace ApexStats
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    [Serializable]
     public partial class MainWindow : Window
     {
+        private BinaryFormatter formatter;
         StringBuilder sb = new StringBuilder();
         ArrayList seasons = new ArrayList();
         string[] ranks = new string[] {"Bronze 4", "Bronze 3", "Bronze 2", "Bronze 1",
@@ -34,30 +37,32 @@ namespace ApexStats
                                        "Platinum 4", "Platinum 3", "Platinum 2", "Platinum 1",
                                        "Diamond 4", "Diamond 3", "Diamond 2", "Diamond 1",
                                        "Master", "Apex Predator" };
+        
         public MainWindow()
         {
             InitializeComponent();
+            
             foreach (string rank in ranks)
             {
                 txtSplitOneRank.Items.Add(rank);
                 txtSplitTwoRank.Items.Add(rank);
             }
-
+            this.formatter = new BinaryFormatter();
         }
 
 
         private void ButtonAddName_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(txtName.Text) && !lstNames.Items.Contains(txtName.Text))
+            if (!string.IsNullOrWhiteSpace(txtSeason.Text) && !lstSeasons.Items.Contains(txtSeason.Text))
             {
-                Season newS = new Season(txtName.Text.ToString(), txtSplitOneRank.Text.ToString(),
+                Season newS = new Season(txtSeason.Text.ToString(), txtSplitOneRank.Text.ToString(),
                     txtSplitTwoRank.Text.ToString(), txtAvgDamage.Text.ToString(),
                     txtKdr.Text.ToString(), txtRankedAvgDamage.Text.ToString(),
                     txtRankedAvgDamage.Text.ToString());
-                lstNames.Items.Add(newS.toString());
+                lstSeasons.Items.Add(newS.toString());
                 seasons.Add(newS);
-                //seasons.Add(Environment.NewLine);
-                txtName.Clear();
+                seasons.Add(Environment.NewLine);
+                txtSeason.Clear();
                 txtSplitOneRank.SelectedItem = null;
                 txtSplitTwoRank.SelectedItem = null;
                 txtAvgDamage.Clear();
@@ -85,34 +90,45 @@ namespace ApexStats
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
             if (saveFileDialog.ShowDialog() == true)
-                foreach (Season season in seasons)
+            {
+                foreach (string season in lstSeasons.Items)
                 {
-                    File.WriteAllText(saveFileDialog.FileName, season.toString());
+                    File.AppendAllText(saveFileDialog.FileName, season + Environment.NewLine);
                 }
+            }
         }
 
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
-            lstNames.Items.Clear();
+            lstSeasons.Items.Clear();
             lstNamesSelected.Items.Clear();
             Season newS = new Season();
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
-            //openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             if (openFileDialog.ShowDialog() == true)
-                foreach (string name in File.ReadAllLines(openFileDialog.FileName))
+                foreach (string season in File.ReadAllLines(openFileDialog.FileName))
                 {
-                    newS.parse(name);
-                    lstNames.Items.Add(newS.toString());
+                    newS.parse(season);
+                    lstSeasons.Items.Add(newS.toString());
                     seasons.Add(newS);
                 }
         }
 
         private void btnShow_Click(object sender, RoutedEventArgs e)
         {
+            Season selected = new Season();
+            selected.parse(lstSeasons.SelectedItem.ToString());
             lstNamesSelected.Items.Clear();
-            lstNamesSelected.Items.Add(lstNames.SelectedItem);
+            lstNamesSelected.Items.Add(lstSeasons.SelectedItem.ToString());
+            txtSeason.Text = selected.getSeason();
+            txtAvgDamage.Text = selected.getAvgDamage();
+            txtKdr.Text = selected.getKdr();
+            txtRankedAvgDamage.Text = selected.getRankedAvgDamage();
+            txtRankedKdr.Text = selected.getRankedKdr();
+            txtSplitOneRank.SelectedItem = selected.getSplitOneRank();
+            txtSplitTwoRank.SelectedItem = selected.getSplitTwoRank();
         }
     }
 

@@ -5,7 +5,6 @@ D:\VisualStudioRepos\ApexStats\ApexStats\bin\Debug\net5.0-windows\ApexStats.runt
 D:\VisualStudioRepos\ApexStats\ApexStats\bin\Debug\net5.0-windows\ApexStats.dll
 D:\VisualStudioRepos\ApexStats\ApexStats\bin\Debug\net5.0-windows\ref\ApexStats.dll
 D:\VisualStudioRepos\ApexStats\ApexStats\bin\Debug\net5.0-windows\ApexStats.pdb
-D:\VisualStudioRepos\ApexStats\ApexStats\obj\Debug\net5.0-windows\ApexStats.csprojAssemblyReference.cache
 D:\VisualStudioRepos\ApexStats\ApexStats\obj\Debug\net5.0-windows\MainWindow.g.cs
 D:\VisualStudioRepos\ApexStats\ApexStats\obj\Debug\net5.0-windows\App.g.cs
 D:\VisualStudioRepos\ApexStats\ApexStats\obj\Debug\net5.0-windows\ApexStats_MarkupCompile.cache
@@ -20,3 +19,4 @@ D:\VisualStudioRepos\ApexStats\ApexStats\obj\Debug\net5.0-windows\ApexStats.dll
 D:\VisualStudioRepos\ApexStats\ApexStats\obj\Debug\net5.0-windows\ref\ApexStats.dll
 D:\VisualStudioRepos\ApexStats\ApexStats\obj\Debug\net5.0-windows\ApexStats.pdb
 D:\VisualStudioRepos\ApexStats\ApexStats\obj\Debug\net5.0-windows\ApexStats.genruntimeconfig.cache
+D:\VisualStudioRepos\ApexStats\ApexStats\obj\Debug\net5.0-windows\ApexStats.csproj.AssemblyReference.cache
