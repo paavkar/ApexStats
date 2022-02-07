@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,10 +24,8 @@ namespace ApexStats
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    [Serializable]
     public partial class MainWindow : Window
     {
-        private BinaryFormatter formatter;
         StringBuilder sb = new StringBuilder();
         ArrayList seasons = new ArrayList();
         string[] ranks = new string[] {"Bronze 4", "Bronze 3", "Bronze 2", "Bronze 1",
@@ -37,31 +34,38 @@ namespace ApexStats
                                        "Platinum 4", "Platinum 3", "Platinum 2", "Platinum 1",
                                        "Diamond 4", "Diamond 3", "Diamond 2", "Diamond 1",
                                        "Master", "Apex Predator" };
-        
+        string[] gamemodes = new string[] { "Battle Royale", "Arenas" };
+
         public MainWindow()
         {
             InitializeComponent();
-            
+
+            foreach (string mode in gamemodes)
+            {
+                txtGamemode.Items.Add(mode);
+            }
+
             foreach (string rank in ranks)
             {
                 txtSplitOneRank.Items.Add(rank);
                 txtSplitTwoRank.Items.Add(rank);
             }
-            this.formatter = new BinaryFormatter();
         }
 
 
-        private void ButtonAddName_Click(object sender, RoutedEventArgs e)
+        private void ButtonAddSeason_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(txtSeason.Text) && !lstSeasons.Items.Contains(txtSeason.Text))
             {
-                Season newS = new Season(txtSeason.Text.ToString(), txtSplitOneRank.Text.ToString(),
-                    txtSplitTwoRank.Text.ToString(), txtAvgDamage.Text.ToString(),
+                Season newS = new Season(txtGamemode.Text.ToString(), txtSeason.Text.ToString(),
+                    txtSplitOneRank.Text.ToString(), txtSplitTwoRank.Text.ToString(),
+                    txtAvgDamage.Text.ToString(),
                     txtKdr.Text.ToString(), txtRankedAvgDamage.Text.ToString(),
                     txtRankedAvgDamage.Text.ToString());
                 lstSeasons.Items.Add(newS.toString());
                 seasons.Add(newS);
                 seasons.Add(Environment.NewLine);
+                txtGamemode.SelectedItem = null;
                 txtSeason.Clear();
                 txtSplitOneRank.SelectedItem = null;
                 txtSplitTwoRank.SelectedItem = null;
@@ -91,7 +95,7 @@ namespace ApexStats
             saveFileDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
             if (saveFileDialog.ShowDialog() == true)
             {
-                foreach (string season in lstSeasons.Items)
+                foreach (string season in lstSeasons.Items) // needs work to get working with seasons list
                 {
                     File.AppendAllText(saveFileDialog.FileName, season + Environment.NewLine);
                 }
@@ -102,7 +106,6 @@ namespace ApexStats
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
             lstSeasons.Items.Clear();
-            lstNamesSelected.Items.Clear();
             Season newS = new Season();
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
@@ -120,8 +123,6 @@ namespace ApexStats
         {
             Season selected = new Season();
             selected.parse(lstSeasons.SelectedItem.ToString());
-            lstNamesSelected.Items.Clear();
-            lstNamesSelected.Items.Add(lstSeasons.SelectedItem.ToString());
             txtSeason.Text = selected.getSeason();
             txtAvgDamage.Text = selected.getAvgDamage();
             txtKdr.Text = selected.getKdr();
@@ -130,10 +131,24 @@ namespace ApexStats
             txtSplitOneRank.SelectedItem = selected.getSplitOneRank();
             txtSplitTwoRank.SelectedItem = selected.getSplitTwoRank();
         }
+
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            txtGamemode.SelectedItem = null;
+            txtSeason.Clear();
+            txtSplitOneRank.SelectedItem = null;
+            txtSplitTwoRank.SelectedItem = null;
+            txtAvgDamage.Clear();
+            txtKdr.Clear();
+            txtRankedAvgDamage.Clear();
+            txtRankedKdr.Clear();
+        }
     }
 
     public class Season
     {
+        private string gamemode;
         private string season;
         private string splitOneRank;
         private string splitTwoRank;
@@ -149,9 +164,10 @@ namespace ApexStats
         }
 
 
-        public Season(string season, string splitOneRank, string splitTwoRank, string avgDamage,
+        public Season(string gamemode, string season, string splitOneRank, string splitTwoRank, string avgDamage,
                             string kdr, string rankedAvgDamage, string rankedKdr)
         {
+            this.gamemode = gamemode;
             this.season = season;
             this.splitOneRank = splitOneRank;
             this.splitTwoRank = splitTwoRank;
@@ -159,6 +175,16 @@ namespace ApexStats
             this.kdr = kdr;
             this.rankedAvgDamage = rankedAvgDamage;
             this.rankedKdr = rankedKdr;
+        }
+
+        public string getGamemode()
+        {
+            return gamemode;
+        }
+
+        public void setGamemode()
+        {
+            this.gamemode = gamemode;
         }
 
         public string getSeason()
@@ -247,7 +273,7 @@ namespace ApexStats
 
         public string toString()
         {
-            return "" + season + " | " + splitOneRank + " | " + splitTwoRank + " | " + avgDamage + " | " +
+            return "" + gamemode + " | " + season + " | " + splitOneRank + " | " + splitTwoRank + " | " + avgDamage + " | " +
                 kdr + " | " + rankedAvgDamage + " | " + rankedKdr;
         }
 
@@ -255,6 +281,7 @@ namespace ApexStats
         public void parse(String rivi)
         {
             StringBuilder sb = new StringBuilder(rivi);
+            gamemode = Separate(sb, '|', gamemode);
             season = Separate(sb, '|', season);
             splitOneRank = Separate(sb, '|', splitOneRank);
             splitTwoRank = Separate(sb, '|', splitTwoRank);

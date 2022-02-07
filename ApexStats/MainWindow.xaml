@@ -23,6 +23,8 @@
         <ListBox Grid.Row="1" x:Name="lstSeasons" />
 
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,5,0">
+            <Label>Gamemode</Label>
+            <ComboBox x:Name="txtGamemode" />
             <Label>Season</Label>
             <TextBox x:Name="txtSeason" />
             <Label>Split One Rank</Label>
@@ -37,12 +39,13 @@
             <TextBox x:Name="txtRankedAvgDamage" />
             <Label>Ranked KDR</Label>
             <TextBox x:Name="txtRankedKdr" />
-            <Button x:Name="btnAdd" Margin="0,5,0,0" Click="ButtonAddName_Click">Add Season Stats</Button>
+            <Button x:Name="btnAdd" Margin="0,5,0,0" Click="ButtonAddSeason_Click">Add Season Stats</Button>
             <Button x:Name="btnSave" Margin="0,5,0,0" Click="btnSave_Click">Save File</Button>
             <Button x:Name="btnOpen" Margin="0,5,0,0" Click="btnOpen_Click">Open File</Button>
             <Button x:Name="btnShow" Margin="0,5,0,0" Click="btnShow_Click">Show Season In Detail</Button>
+            <Button x:Name="btnClear" Margin="0,5,0,0" Click="btnClear_Click" Content="Clear Everything"/>
         </StackPanel>
 
-        <ListBox Grid.Row="1" x:Name="lstNamesSelected" Grid.Column="2" />
+        
     </Grid>
 </Window>
